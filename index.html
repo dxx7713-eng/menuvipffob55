@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
+<style>
+
+:root{color-scheme:dark;--bg:#070b14;--panel:#0e1625;--panel2:#111d30;--line:rgba(139,166,205,.16);--muted:#8b9ab1;--text:#f2f6ff;--cyan:#63e4e8;--blue:#668cff;--green:#42d6a0;--gold:#e8c77b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;padding:18px 12px 34px;background:radial-gradient(ellipse at 50% -15%,rgba(65,111,190,.25),transparent 48%),radial-gradient(ellipse at 100% 80%,rgba(26,117,130,.10),transparent 38%),var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;letter-spacing:.01em}
+button,input{font:inherit}button{cursor:pointer}
+#login{min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center}
+.login-box{width:100%;max-width:390px;padding:34px 25px 28px;border-radius:28px;background:linear-gradient(155deg,rgba(20,34,55,.98),rgba(10,16,28,.98));border:1px solid rgba(115,162,220,.26);box-shadow:0 28px 80px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.06)}
+.crosshair{width:72px;height:72px;margin:0 auto 21px;border-radius:22px;border:1px solid rgba(99,228,232,.42);position:relative;transform:rotate(45deg);background:linear-gradient(145deg,rgba(99,228,232,.12),rgba(102,140,255,.08));box-shadow:0 0 34px rgba(65,204,218,.12)}
+.crosshair:before,.crosshair:after{content:"";position:absolute;background:var(--cyan);opacity:.8}.crosshair:before{width:1px;height:54px;left:35px;top:8px}.crosshair:after{height:1px;width:54px;left:8px;top:35px}.cross-dot{position:absolute;width:9px;height:9px;left:31px;top:31px;border-radius:50%;background:#fff;box-shadow:0 0 15px var(--cyan)}
+.login-title{text-align:center;font-size:29px;line-height:1.15;font-weight:850;letter-spacing:-.045em;background:linear-gradient(90deg,#fff,#a8d8ff 52%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.login-sub{text-align:center;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.18em;margin:10px 0 28px}
+.input{width:100%;padding:17px 16px;border-radius:14px;border:1px solid rgba(139,166,205,.25);outline:none;background:#080f1c;color:white;font-size:16px;text-align:center;transition:.2s}.input:focus{border-color:rgba(99,228,232,.7);box-shadow:0 0 0 3px rgba(99,228,232,.09)}.login-btn{width:100%;margin-top:14px;padding:16px;border:1px solid rgba(255,255,255,.16);border-radius:14px;background:linear-gradient(105deg,#4777d9,#29aeb9);color:#06121c;font-size:14px;font-weight:900;letter-spacing:.12em;box-shadow:0 12px 28px rgba(43,153,190,.2)}.error{display:none;margin-top:13px;text-align:center;color:#ff8294;font-size:12px;font-weight:650}
+#menu{display:none}.container{width:100%;max-width:620px;margin:0 auto;padding:22px;border-radius:27px;background:linear-gradient(155deg,rgba(17,28,46,.98),rgba(9,15,26,.98));border:1px solid rgba(139,166,205,.2);box-shadow:0 25px 75px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.045)}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px}.logo{font-size:24px;font-weight:850;letter-spacing:-.045em;background:linear-gradient(90deg,#fff,#a9d9ff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.status{margin-top:6px;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.13em}.admin{white-space:nowrap;padding:8px 11px;border-radius:10px;border:1px solid rgba(232,199,123,.28);background:rgba(232,199,123,.07);color:var(--gold);font-size:11px;font-weight:800;letter-spacing:.08em}.dot{display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green)}
+.target{margin-top:22px;padding:17px;border-radius:18px;background:linear-gradient(110deg,rgba(58,102,153,.18),rgba(24,47,66,.22));border:1px solid rgba(99,228,232,.16);display:flex;align-items:center;gap:14px}.target-ring{width:54px;height:54px;flex-shrink:0;border-radius:16px;border:1px solid rgba(99,228,232,.55);position:relative;background:rgba(99,228,232,.05);box-shadow:inset 0 0 18px rgba(99,228,232,.08)}.target-ring:before{content:"";position:absolute;width:24px;height:24px;left:14px;top:14px;border:1px solid var(--cyan);border-radius:50%}.target-ring:after{content:"";position:absolute;width:6px;height:6px;left:23px;top:23px;border-radius:50%;background:#fff;box-shadow:0 0 10px var(--cyan)}.target-info{flex:1;min-width:0}.target-title{font-size:15px;font-weight:800;letter-spacing:-.02em}.target-text{margin-top:5px;font-size:11px;color:var(--muted)}.ready{padding:7px 9px;border-radius:8px;background:rgba(66,214,160,.08);color:var(--green);border:1px solid rgba(66,214,160,.22);font-size:9px;font-weight:900;letter-spacing:.12em}
+.line{height:1px;margin:22px 0 17px;background:linear-gradient(90deg,transparent,rgba(139,166,205,.25),transparent)}
+.card{min-height:76px;margin-bottom:10px;padding:14px 15px;border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(110deg,rgba(23,37,59,.92),rgba(15,25,41,.94));border:1px solid var(--line);transition:transform .18s,border-color .18s,background .18s}.card:active{transform:scale(.992)}.card:has(.switch.active){border-color:rgba(99,228,232,.3);background:linear-gradient(110deg,rgba(25,54,70,.8),rgba(15,29,45,.96))}.left{display:flex;align-items:center;gap:13px;min-width:0}.icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(102,140,255,.10);border:1px solid rgba(102,140,255,.19);color:#9dc4ff;font-size:19px}.title{font-size:14px;font-weight:800;letter-spacing:-.015em}.desc{margin-top:4px;color:var(--muted);font-size:10px;letter-spacing:.015em}
+.switch{width:52px;height:30px;position:relative;flex-shrink:0;border-radius:30px;background:#303b4d;border:1px solid rgba(255,255,255,.08);transition:.22s}.switch.active{background:linear-gradient(110deg,#318fa8,#50d8cb);box-shadow:0 0 16px rgba(80,216,203,.2);border-color:transparent}.knob{width:22px;height:22px;position:absolute;top:3px;left:3px;border-radius:50%;background:#eaf3fa;transition:.22s;box-shadow:0 2px 6px rgba(0,0,0,.35)}.switch.active .knob{left:25px;background:white}
+.activate{width:100%;margin-top:9px;padding:16px;border:1px solid rgba(66,214,160,.32);border-radius:14px;background:linear-gradient(100deg,#176e70,#239c88);color:#effffb;font-size:13px;font-weight:900;letter-spacing:.12em;box-shadow:0 10px 24px rgba(20,150,125,.14);transition:.2s}.activate:active{transform:scale(.99);filter:brightness(1.12)}
+.console{margin-top:16px;padding:14px 15px;border-radius:14px;background:rgba(4,10,18,.78);border:1px solid rgba(99,228,232,.17);color:#9adbdc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;line-height:1.65;min-height:48px;overflow-wrap:anywhere}.console:before{content:"SYSTEM NOTIFICATIONS";display:block;margin-bottom:6px;color:#718da7;font-family:Inter,-apple-system,sans-serif;font-size:9px;font-weight:900;letter-spacing:.16em}.console .log-entry{display:block;padding:2px 0;color:#a8d7d8}.console .log-entry:first-of-type{color:#d4f4ee}
+@media(max-width:430px){body{padding:12px 10px 26px}.container{padding:16px;border-radius:22px}.logo{font-size:21px}.admin{font-size:10px;padding:7px 9px}.target{padding:13px;gap:11px}.target-ring{width:48px;height:48px}.target-ring:before{left:11px;top:11px}.target-ring:after{left:20px;top:20px}.card{min-height:68px;padding:11px 12px}.icon{width:36px;height:36px}.title{font-size:13px}.desc{font-size:9px}.switch{width:49px;height:29px}.knob{width:21px;height:21px}.switch.active .knob{left:24px}.login-box{padding:30px 21px}}
+
+
+/* ===== VIP PRO VISUAL REDESIGN ===== */
+:root{color-scheme:dark;--bg:#080610;--panel:#151020;--panel2:#1b1428;--line:rgba(190,117,255,.22);--muted:#aaa0b8;--text:#fff8ff;--cyan:#d879ff;--blue:#8b5cf6;--green:#62e6b5;--gold:#ffd58a}
+body{padding:18px 12px 34px;background:radial-gradient(ellipse at 50% -12%,rgba(171,71,255,.24),transparent 46%),radial-gradient(ellipse at 100% 75%,rgba(224,54,190,.12),transparent 38%),#080610;color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;letter-spacing:.012em}
+.login-box{max-width:430px;padding:38px 26px 32px;border-radius:32px;background:linear-gradient(150deg,rgba(29,20,43,.98),rgba(13,10,22,.99));border:1px solid rgba(183,91,255,.52);box-shadow:0 28px 90px rgba(0,0,0,.58),0 0 42px rgba(171,71,255,.12),inset 0 1px rgba(255,255,255,.08)}
+.crosshair{width:82px;height:82px;margin-bottom:24px;border-radius:50%;border:2px solid #b95cff;transform:none;background:radial-gradient(circle,rgba(204,113,255,.18),rgba(106,54,165,.06));box-shadow:0 0 34px rgba(190,91,255,.24)}
+.crosshair:before{width:2px;height:100px;left:38px;top:-11px;background:#cf76ff}.crosshair:after{height:2px;width:100px;left:-11px;top:38px;background:#cf76ff}.cross-dot{width:12px;height:12px;left:33px;top:33px;background:#fff;box-shadow:0 0 20px #e6b4ff}
+.login-title{font-size:clamp(29px,7vw,38px);font-weight:900;letter-spacing:-.055em;background:linear-gradient(90deg,#fff 5%,#d9a5ff 52%,#ec69d5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.login-sub{font-size:12px;letter-spacing:.13em;color:#a99bb8;margin:12px 0 32px}
+.input{padding:19px 16px;border-radius:17px;border:1px solid rgba(190,117,255,.38);background:#090711;font-size:17px;font-weight:600}.input:focus{border-color:#d879ff;box-shadow:0 0 0 4px rgba(190,91,255,.13),0 0 24px rgba(190,91,255,.12)}
+.login-btn{margin-top:16px;padding:18px;border:0;border-radius:17px;background:linear-gradient(105deg,#8744e8,#d43fc5);color:#fff;font-size:15px;font-weight:900;letter-spacing:.1em;box-shadow:0 14px 32px rgba(179,58,207,.28)}
+.container{max-width:640px;padding:22px;border-radius:28px;background:linear-gradient(155deg,rgba(27,19,41,.99),rgba(12,9,20,.99));border:1px solid rgba(190,117,255,.3);box-shadow:0 28px 85px rgba(0,0,0,.5),0 0 35px rgba(166,77,235,.09),inset 0 1px rgba(255,255,255,.06)}
+.logo{background:linear-gradient(90deg,#fff,#d9a5ff 55%,#f078d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:26px;font-weight:900}
+.status{color:#aa9bb8;font-size:10px;letter-spacing:.16em}
+.admin{border-color:rgba(255,213,138,.32);background:rgba(255,213,138,.08);color:#ffd58a}
+.target{background:linear-gradient(110deg,rgba(119,62,166,.2),rgba(49,30,69,.28));border:1px solid rgba(202,123,255,.24);border-radius:19px}
+.target-ring{border-color:rgba(216,121,255,.68);background:rgba(216,121,255,.08);box-shadow:inset 0 0 18px rgba(216,121,255,.12),0 0 18px rgba(216,121,255,.08)}
+.target-ring:before{border-color:#d879ff}.target-ring:after{background:#fff;box-shadow:0 0 12px #d879ff}
+.ready{background:rgba(98,230,181,.09);color:#62e6b5;border-color:rgba(98,230,181,.25)}
+.line{background:linear-gradient(90deg,transparent,rgba(190,117,255,.34),transparent)}
+.card{min-height:82px;padding:15px 16px;border-radius:18px;background:linear-gradient(110deg,rgba(35,25,51,.96),rgba(20,15,31,.98));border:1px solid rgba(190,117,255,.16);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.card:has(.switch.active){border-color:rgba(216,121,255,.52);background:linear-gradient(110deg,rgba(69,37,88,.72),rgba(27,18,41,.98));box-shadow:0 0 22px rgba(190,91,255,.09)}
+.icon{width:43px;height:43px;border-radius:14px;background:linear-gradient(145deg,rgba(151,83,226,.2),rgba(216,80,190,.1));border:1px solid rgba(196,121,255,.26);color:#e0b3ff;font-size:21px}
+.title{font-size:15px;font-weight:850;letter-spacing:-.02em;color:#fff8ff}.desc{font-size:11px;color:#aa9bb8;letter-spacing:.02em}
+.switch{width:54px;height:31px;background:#393044;border:1px solid rgba(255,255,255,.1)}.switch.active{background:linear-gradient(110deg,#8744e8,#d43fc5);box-shadow:0 0 19px rgba(196,76,220,.3)}.knob{width:23px;height:23px}.switch.active .knob{left:27px}
+.activate{padding:18px;border:0;border-radius:16px;background:linear-gradient(100deg,#7840dc,#c83fbd);color:#fff;font-size:14px;font-weight:900;letter-spacing:.1em;box-shadow:0 12px 28px rgba(174,63,205,.24)}
+.console{margin-top:18px;padding:16px;border-radius:17px;background:linear-gradient(145deg,rgba(8,6,15,.96),rgba(18,12,27,.96));border:1px solid rgba(190,117,255,.28);color:#d9b9ef;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:12px;line-height:1.75;box-shadow:inset 0 1px rgba(255,255,255,.035)}
+.console:before{content:"CENTRAL NOTIFICATION  /  LIVE ACTIVITY";font-size:10px;letter-spacing:.13em;color:#c68af0;padding-bottom:8px;border-bottom:1px solid rgba(190,117,255,.16)}
+.console .log-entry{display:block;margin-top:5px;padding:7px 9px;border-radius:9px;background:rgba(155,91,190,.09);color:#e7d5f2;font-weight:600}.console .log-entry:first-of-type{color:#d8b2ff}
+.error{font-size:13px;font-weight:750}
+@media(max-width:430px){body{padding:12px 10px 26px}.login-box{padding:34px 21px 29px}.container{padding:16px;border-radius:23px}.logo{font-size:22px}.card{min-height:74px}.title{font-size:14px}.desc{font-size:10px}}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- ================= LOGIN ================= -->
+
+<div id="login">
+
+  <div class="login-box">
+
+    <div class="crosshair">
+      <div class="cross-dot"></div>
+    </div>
+
+    <div class="login-title">
+      MENU SUPER OB55
+    </div>
+
+    <div class="login-sub">
+      AIM SYSTEM • SECURE ACCESS
+    </div>
+
+    <input
+      id="password"
+      class="input"
+      type="password"
+      placeholder="Vui lòng nhập mật khẩu"
+    >
+
+    <button
+      class="login-btn"
+      onclick="login()"
+    >
+      XÁC NHẬN
+    </button>
+
+    <div
+      id="error"
+      class="error"
+    >
+       "Mật khẩu không chính xác vui lòng thử lại"
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= MENU ================= -->
+
+<div id="menu">
+
+<div class="container">
+
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <div>
+
+      <div class="logo">
+        MENU SUPER OB55
+      </div>
+
+      <div class="status">
+        SECURE PANEL  /  INTERFACE ONLINE
+      </div>
+
+    </div>
+
+    <div class="admin">
+      <span class="dot"></span>
+      Admin
+    </div>
+
+  </div>
+
+
+  <!-- TARGET -->
+
+  <div class="target">
+
+    <div class="target-ring"></div>
+
+    <div class="target-info">
+
+      <div class="target-title">
+        MENU 5 CHỨC NĂNG
+      </div>
+
+      <div class="target-text">
+        Hỗ Trợ Kéo Tâm Phù Hợp Với Phiên Bản OB55</div>
+
+    </div>
+
+    <div class="ready">
+      READY
+    </div>
+
+  </div>
+
+
+  <div class="line"></div>
+
+
+  <!-- AIMLOCK -->
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="icon">
+        ◎
+      </div>
+
+      <div>
+
+        <div class="title">
+          AimLock
+        </div>
+
+        <div class="desc">
+          @admin.hacve
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="switch"
+      onclick="toggle(this,'AimLock')"
+    >
+      <div class="knob"></div>
+    </div>
+
+  </div>
+
+
+  <!-- NHẸ TÂM -->
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="icon">
+        ◉
+      </div>
+
+      <div>
+
+        <div class="title">
+          Nhẹ Tâm
+        </div>
+
+        <div class="desc">
+          @admin.hacve
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="switch"
+      onclick="toggle(this,'Nhẹ Tâm')"
+    >
+      <div class="knob"></div>
+    </div>
+
+  </div>
+
+
+  <!-- FIX RUNG -->
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="icon">
+        ≋
+      </div>
+
+      <div>
+
+        <div class="title">
+          Fix Rung
+        </div>
+
+        <div class="desc">
+          @admin.hacve
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="switch"
+      onclick="toggle(this,'Fix Rung')"
+    >
+      <div class="knob"></div>
+    </div>
+
+  </div>
+
+
+  <!-- FIX LỐ -->
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="icon">
+        ⌖
+      </div>
+
+      <div>
+
+        <div class="title">
+          Fix Lố
+        </div>
+
+        <div class="desc">
+          @admin.hacve
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="switch"
+      onclick="toggle(this,'Fix Lố')"
+    >
+      <div class="knob"></div>
+    </div>
+
+  </div>
+
+
+  <!-- ĐỘ NHẠY -->
+
+  <div class="card">
+
+    <div class="left">
+
+      <div class="icon">
+        ◌
+      </div>
+
+      <div>
+
+        <div class="title">
+          Tăng Nhạy
+        </div>
+
+        <div class="desc">
+          @admin.hacve
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="switch"
+      onclick="toggle(this,'Tăng Nhạy')"
+    >
+      <div class="knob"></div>
+    </div>
+
+  </div>
+
+
+  <!-- ACTIVATE -->
+
+  <button
+    class="activate"
+    onclick="activateMenu()"
+  >
+    KÍCH HOẠT CHỨC NĂNG
+  </button>
+
+
+  <!-- CONSOLE -->
+
+  <div
+    id="console"
+    class="console"
+  >
+    <span class="log-entry">[SYSTEM READY] Chức năng đã sẵn sàng</span>
+  </div>
+
+
+</div>
+
+</div>
+
+
+<script>
+const PASSWORD = "1002";
+
+function addLog(message, type = "INFO") {
+  const consoleBox = document.getElementById("console");
+  const time = new Date().toLocaleTimeString("vi-VN", {hour12:false});
+  const entry = document.createElement("span");
+  entry.className = "log-entry";
+  entry.textContent = `[${time}] [${type}] ${message}`;
+  consoleBox.appendChild(entry);
+  while (consoleBox.querySelectorAll(".log-entry").length > 5) {
+    consoleBox.querySelector(".log-entry").remove();
+  }
+}
+
+function login() {
+  const input = document.getElementById("password");
+  const error = document.getElementById("error");
+  if (input.value === PASSWORD) {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("menu").style.display = "block";
+    addLog("Đăng nhập giao diện thành công", "ACCESS");
+  } else {
+    error.style.display = "block";
+    input.value = "";
+    input.focus();
+  }
+}
+
+document.getElementById("password").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") login();
+});
+
+function toggle(element, name) {
+  element.classList.toggle("active");
+  const enabled = element.classList.contains("active");
+  addLog(`${name}: ${enabled ? "ĐÃ BẬT" : "ĐÃ TẮT"}.`, enabled ? "ENABLED" : "DISABLED");
+}
+
+function activateMenu() {
+  const button = document.querySelector(".activate");
+  button.textContent = "✓ MENU ĐÃ SẴN SÀNG";
+  addLog("Trạng thái giao diện: đã kích hoạt.", "SUCCESS");
+  setTimeout(() => { button.textContent = "KÍCH HOẠT MENU"; }, 2200);
+}
+</script>
+
+</body>
+</html>
